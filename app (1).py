@@ -95,6 +95,44 @@ if uploaded_file is not None:
         else:
             st.info("No 'Profit' column found in this CSV.")
 
+        
+        # Sales and Profit Charts
+        st.subheader("📈 Sales and Profit Analysis")
+
+        if "Product" in data.columns:
+            chart_data = data.copy()
+
+            for col in ["Sales", "Profit"]:
+                if col in chart_data.columns:
+                    chart_data[col] = pd.to_numeric(
+                        chart_data[col], errors="coerce"
+                    )
+
+            if "Sales" in chart_data.columns:
+                sales_by_product = (
+                    chart_data.groupby("Product")["Sales"]
+                    .sum()
+                    .dropna()
+                )
+
+                if not sales_by_product.empty:
+                    st.write("### Sales by Product")
+                    st.bar_chart(sales_by_product)
+
+            if "Profit" in chart_data.columns:
+                profit_by_product = (
+                    chart_data.groupby("Product")["Profit"]
+                    .sum()
+                    .dropna()
+                )
+
+                if not profit_by_product.empty:
+                    st.write("### Profit by Product")
+                    st.bar_chart(profit_by_product)
+
+        else:
+            st.info("A 'Product' column is required for product charts.")
+
         # Numeric summary
         st.subheader("📊 Numeric Summary")
         numeric = data.select_dtypes(include="number")
