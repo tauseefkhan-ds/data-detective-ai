@@ -143,7 +143,7 @@ Dataset summary:
                 ai_report = response.choices[0].message.content
 
                 if ai_report:
-                    st.markdown(ai_report)
+                    st.markdown(ai_report, unsafe_allow_html=False)
 
                     st.download_button(
                         label="⬇️ Download AI Report",
