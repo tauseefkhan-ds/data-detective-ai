@@ -33,6 +33,40 @@ if uploaded_file is not None:
         c.write("MISSING VALUES")
         c.title(str(int(data.isnull().sum().sum())))
 
+        
+        # Business Performance Overview
+        st.subheader("💼 Business Performance Overview")
+
+        if "Sales" in data.columns and "Profit" in data.columns:
+            sales = pd.to_numeric(data["Sales"], errors="coerce")
+            profit = pd.to_numeric(data["Profit"], errors="coerce")
+
+            total_sales = sales.sum()
+            total_profit = profit.sum()
+            loss_orders = int((profit < 0).sum())
+
+            profit_margin = (
+                (total_profit / total_sales) * 100
+                if total_sales != 0 else 0
+            )
+
+            col1, col2 = st.columns(2)
+            col1.write("TOTAL SALES")
+            col1.title(f"{total_sales:,.2f}")
+
+            col2.write("TOTAL PROFIT")
+            col2.title(f"{total_profit:,.2f}")
+
+            col3, col4 = st.columns(2)
+            col3.write("PROFIT MARGIN")
+            col3.title(f"{profit_margin:.2f}%")
+
+            col4.write("LOSS ORDERS")
+            col4.title(str(loss_orders))
+
+        else:
+            st.info("Sales and Profit columns are required for this analysis.")
+
         # Data preview
         st.subheader("📋 Data Preview")
         st.dataframe(data.head(20), use_container_width=True)
