@@ -206,6 +206,48 @@ if uploaded_file is not None:
                 "Continue monitoring data quality."
             )
 
+        
+        # Downloadable Analysis Report
+        st.subheader("📄 Download Analysis Report")
+
+        report_lines = [
+            "DATA DETECTIVE AI - ANALYSIS REPORT",
+            "=" * 40,
+            f"Total Rows: {data.shape[0]}",
+            f"Total Columns: {data.shape[1]}",
+            f"Total Missing Values: {int(data.isnull().sum().sum())}",
+            f"Exact Duplicate Rows: {int(data.duplicated().sum())}",
+            "",
+            "MISSING VALUES BY COLUMN"
+        ]
+
+        for column, count in data.isnull().sum().items():
+            if count > 0:
+                report_lines.append(f"{column}: {count}")
+        
+        if data.isnull().sum().sum() == 0:
+            report_lines.append("No missing values found.")
+
+        report_lines.extend([
+            "",
+            "BUSINESS RECOMMENDATIONS"
+        ])
+
+        if recommendations:
+            for i, recommendation in enumerate(recommendations, start=1):
+                report_lines.append(f"{i}. {recommendation}")
+        else:
+            report_lines.append("No major issues detected by current checks.")
+
+        report_text = "\n".join(report_lines)
+
+        st.download_button(
+            label="⬇️ Download Analysis Report",
+            data=report_text,
+            file_name="data_detective_analysis.txt",
+            mime="text/plain"
+        )
+
         # Numeric summary
         st.subheader("📊 Numeric Summary")
         numeric = data.select_dtypes(include="number")
