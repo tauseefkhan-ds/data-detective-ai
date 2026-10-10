@@ -133,6 +133,79 @@ if uploaded_file is not None:
         else:
             st.info("A 'Product' column is required for product charts.")
 
+        
+        # Automatic Business Recommendations
+        st.subheader("💡 Business Recommendations")
+
+        recommendations = []
+
+        if data.isnull().sum().sum() > 0:
+            recommendations.append(
+                "Clean missing values before using this data for business decisions."
+            )
+
+        if data.duplicated().sum() > 0:
+            recommendations.append(
+                "Review duplicate records to avoid counting the same transaction more than once."
+            )
+
+        if "Order_ID" in data.columns:
+            repeated_ids = data[
+                data["Order_ID"].notna()
+                & data["Order_ID"].duplicated(keep=False)
+            ]
+
+            if not repeated_ids.empty:
+                recommendations.append(
+                    "Review repeated Order IDs to confirm whether they represent duplicate orders."
+                )
+
+        if "Profit" in data.columns:
+            profit_values = pd.to_numeric(
+                data["Profit"], errors="coerce"
+            )
+
+            if (profit_values < 0).any():
+                recommendations.append(
+                    "Investigate loss-making orders and review their costs and selling prices."
+                )
+
+            if (profit_values > 0).any():
+                recommendations.append(
+                    "Compare profitable and loss-making orders to identify better business opportunities."
+                )
+
+        if "Sales" in data.columns and "Product" in data.columns:
+            sales_values = pd.to_numeric(
+                data["Sales"], errors="coerce"
+            )
+
+            product_sales = pd.DataFrame({
+                "Product": data["Product"],
+                "Sales": sales_values
+            }).dropna()
+
+            if not product_sales.empty:
+                best_product = (
+                    product_sales.groupby("Product")["Sales"]
+                    .sum()
+                    .idxmax()
+                )
+
+                recommendations.append(
+                    f"Review the sales performance of {best_product}, "
+                    "which has the highest total sales in this dataset."
+                )
+
+        if recommendations:
+            for i, recommendation in enumerate(recommendations, start=1):
+                st.write(f"**{i}.** {recommendation}")
+        else:
+            st.success(
+                "No major issues detected by the current checks. "
+                "Continue monitoring data quality."
+            )
+
         # Numeric summary
         st.subheader("📊 Numeric Summary")
         numeric = data.select_dtypes(include="number")
