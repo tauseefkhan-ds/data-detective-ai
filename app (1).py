@@ -113,10 +113,19 @@ Numeric and categorical summary:
                         }
                     ],
                     temperature=0.2,
-                    max_tokens=700
+                    max_tokens=1500
                 )
 
-                st.markdown(response.choices[0].message.content)
+                ai_report = response.choices[0].message.content
+
+st.markdown(ai_report)
+
+st.download_button(
+    label="⬇️ Download AI Report",
+    data=ai_report,
+    file_name="data_detective_ai_report.md",
+    mime="text/markdown"
+)
 
             
             except Exception as e:
