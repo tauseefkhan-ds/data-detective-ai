@@ -118,12 +118,10 @@ Numeric and categorical summary:
 
                 st.markdown(response.choices[0].message.content)
 
+            
             except Exception as e:
-                st.error(
-                    "AI insights could not be generated. "
-                    "Check your Groq API key, model availability, "
-                    "usage limits, and app logs."
-                )
+                st.error(f"AI Error: {type(e).__name__}: {e}")
+
 
         # Data preview
         st.subheader("📋 Data Preview")
