@@ -61,3 +61,23 @@ Never upload your actual API key to GitHub.
 ## 👨‍💻 Author
 
 Developed as a Data Science portfolio project to demonstrate data analysis, data quality checks, visualization, and AI integration.
+
+## 📸 Project Screenshots
+
+### 1. Data Overview
+![Data Overview](02_Data_overview.png)
+
+### 2. AI Business Insights
+![AI Business Insights](01_AI_Business_insights.png)
+
+### 3. AI Insights Detail
+![AI Insights Detail](03_ai-insights.png)
+
+### 4. Data Quality Checks
+![Data Quality Checks](04_data-quality.png)
+
+### 5. Profit Analysis Chart
+![Profit Analysis](05_profit-chart.png)
+
+### 6. Sales Analysis Chart
+![Sales Analysis](06_sales-chart.png)
